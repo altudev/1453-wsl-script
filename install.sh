@@ -93,6 +93,7 @@ main() {
         "src/modules/go.sh:Go kurulum modülü"
         "src/modules/ai-cli.sh:AI CLI araçları"
         "src/modules/ai-frameworks.sh:AI framework'leri"
+        "src/modules/quickstart.sh:Quick Start modu"
         "src/modules/menus.sh:Menü sistemi"
     )
 

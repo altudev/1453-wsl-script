@@ -51,8 +51,71 @@ show_menu() {
     echo -e "${CYAN}════════════════════════════════════════════════════════════════${NC}"
 }
 
-# Main program loop
-main() {
+# Show mode selection menu
+show_mode_selection() {
+    clear
+    echo -e "${CYAN}"
+    cat << 'EOF'
+    ╔════════════════════════════════════════════════════════════════╗
+    ║                                                                ║
+    ║           🎯 1453.AI - MOD SEÇİMİNİ YAPIN 🎯                  ║
+    ║                                                                ║
+    ╚════════════════════════════════════════════════════════════════╝
+EOF
+    echo -e "${NC}"
+    echo -e "${YELLOW}Hangi kurulum modunu tercih edersiniz?${NC}"
+    echo ""
+    echo -e "  ${GREEN}1${NC}) ${CYAN}🚀 QUICK START MODE (Önerilen)${NC}"
+    echo -e "     ${YELLOW}→ Vibe coder'lar ve yeni başlayanlar için${NC}"
+    echo -e "     ${YELLOW}→ Basit sorular, otomatik kurulum${NC}"
+    echo -e "     ${YELLOW}→ Sizi yormaz, sadece gerekli araçları kurar${NC}"
+    echo ""
+    echo -e "  ${GREEN}2${NC}) ${CYAN}⚙️  ADVANCED MODE${NC}"
+    echo -e "     ${YELLOW}→ İleri düzey kullanıcılar için${NC}"
+    echo -e "     ${YELLOW}→ Detaylı kontrol, her aracı ayrı seçin${NC}"
+    echo -e "     ${YELLOW}→ 14 farklı kurulum seçeneği${NC}"
+    echo ""
+    echo -e "  ${GREEN}0${NC}) ${CYAN}❌ Çıkış${NC}"
+    echo ""
+    echo -e "${CYAN}────────────────────────────────────────────────────────────${NC}"
+    echo ""
+    echo -ne "${YELLOW}Seçiminiz (0-2): ${NC}"
+    read -r mode_choice
+
+    case $mode_choice in
+        1)
+            echo ""
+            run_quickstart_mode
+            if [ $? -eq 0 ]; then
+                # User wants to continue, show mode selection again
+                show_mode_selection
+            fi
+            ;;
+        2)
+            # Run advanced mode
+            run_advanced_mode
+            ;;
+        0)
+            echo -e "\n${GREEN}[BİLGİ]${NC} Kurulum scripti sonlandırılıyor..."
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}[HATA]${NC} Geçersiz seçim! Lütfen 0-2 arasında bir değer girin."
+            sleep 2
+            show_mode_selection
+            ;;
+    esac
+}
+
+# Advanced mode menu (current menu system)
+show_advanced_menu() {
+    clear
+    show_banner
+    show_menu
+}
+
+# Main program loop - Advanced Mode
+run_advanced_mode() {
     # Detect package manager on startup
     detect_package_manager
 
@@ -61,7 +124,7 @@ main() {
     local PYTHON_INSTALLED=false
 
     while true; do
-        show_menu
+        show_advanced_menu
         echo -ne "\n${YELLOW}Seçiminizi yapın (virgülle ayırarak birden fazla seçebilirsiniz): ${NC}"
         read -r choices
 
@@ -105,9 +168,9 @@ main() {
                 13) remove_ai_frameworks_menu ;;
                 14) install_go_menu ;;
                 0)
-                    echo -e "\n${GREEN}[BİLGİ]${NC} Kurulum scripti sonlandırılıyor..."
-                    echo -e "${YELLOW}[İPUCU]${NC} Yeni kurulumların aktif olması için terminali yeniden başlatın!"
-                    exit 0
+                    echo -e "\n${GREEN}[BİLGİ]${NC} Ana menüye dönülüyor..."
+                    sleep 1
+                    show_mode_selection
                     ;;
                 *)
                     echo -e "${RED}[HATA]${NC} Geçersiz seçim: $choice"
@@ -128,8 +191,17 @@ main() {
     done
 }
 
+# Main program loop - entry point
+main() {
+    show_mode_selection
+}
+
 # Export functions for use in other modules
 export -f configure_git
 export -f prepare_and_configure_git
 export -f show_menu
+export -f show_mode_selection
+export -f show_advanced_menu
+export -f run_advanced_mode
+export -f run_quickstart_mode
 export -f main

@@ -47,6 +47,9 @@ source "${SCRIPT_DIR}/modules/ai-cli.sh"
 # shellcheck source=modules/ai-frameworks.sh
 source "${SCRIPT_DIR}/modules/ai-frameworks.sh"
 
+# shellcheck source=modules/quickstart.sh
+source "${SCRIPT_DIR}/modules/quickstart.sh"
+
 # shellcheck source=modules/menus.sh
 source "${SCRIPT_DIR}/modules/menus.sh"
 
